@@ -3,7 +3,6 @@ package srp
 import (
   "crypto/sha1"
   "encoding/hex"
-  "math/big"
   "testing"
 )
 
@@ -19,8 +18,6 @@ const (
   rfc5054_I = "alice"
   rfc5054_p = "password123"
   rfc5054_s = "BEB25379D1A8581EB5A727673A2441EE"
-  rfc5054_N = rfc5054_1024_N
-  rfc5054_g = rfc5054_1024_g
   rfc5054_k = "7556AA045AEF2CDD07ABAF0F665C3E818913186F"
   rfc5054_x = "94B7555AABE9127CC58CCF4993DB6CF84D16C124"
   rfc5054_v = "7E273DE8696FFC4F4E337D05B4B375BEB0DDE1569E8FA00A9886D8129BADA1F1822223CA1A605B530E379BA4729FDC59F105B4787E5186F5C671085A1447B52A48CF1970B4FB6F8400BBF4CEBFBB168152E08AB5EA53D15C1AFF87B2B9DA6E04E058AD51CC72BFC9033B564E26480D78E955A5E29E7AB245DB2BE315E2099AFB"
@@ -53,11 +50,6 @@ func (testHelper  *TestHelper) srp_s(I string) []byte {
   return s
 }
 
-func hex2i(s string) *big.Int {
-  i, _ := new(big.Int).SetString(s, 16)
-  return i
-}
-
 func TestRfc5054(t *testing.T) {
 
   testHelper := &TestHelper{rfc5054_a, rfc5054_b, rfc5054_v, rfc5054_s}
@@ -65,7 +57,7 @@ func TestRfc5054(t *testing.T) {
   I := rfc5054_I
   p := rfc5054_p
 
-  srp := NewSrp(hex2i(rfc5054_N), hex2i(rfc5054_g), hex2i(rfc5054_k), sha1.New(), testHelper, testHelper)
+  srp := NewSrp(rfc5054_1024_N, rfc5054_1024_g, hex2i(rfc5054_k), sha1.New(), testHelper, testHelper)
 
   // user enters I and p
   a, A, err := srp.SrpXchg1_User()
